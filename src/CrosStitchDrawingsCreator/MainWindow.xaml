@@ -46,6 +46,12 @@
 
                         <!-- Window control buttons -->
                         <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Stretch">
+                            <Button Content="🌓" Command="{Binding ToggleThemeCommand}"
+                                    Width="40" Height="32" FontSize="13"
+                                    Background="Transparent" BorderThickness="0"
+                                    Foreground="{StaticResource TextSecondaryBrush}"
+                                    ToolTip="切换主题"
+                                    Style="{x:Null}"/>
                             <Button x:Name="MinimizeBtn" Content="─"
                                     Width="46" Height="32" FontSize="14"
                                     Background="Transparent" BorderThickness="0"

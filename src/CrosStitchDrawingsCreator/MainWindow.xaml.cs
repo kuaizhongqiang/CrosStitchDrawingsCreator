@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using CrosStitchDrawingsCreator.Services;
 using CrosStitchDrawingsCreator.ViewModels;
 
 namespace CrosStitchDrawingsCreator;
@@ -17,15 +18,35 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         Loaded += OnLoaded;
+        Closing += OnClosing;
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
-        // Enable window dragging on the title bar area
-        var titleBar = (Border)VisualTreeHelper.GetChild(this, 0);
-        // Find the title bar grid row (0)
-        var grid = (Grid)VisualTreeHelper.GetChild(
-            (Border)VisualTreeHelper.GetChild(this, 0), 0);
+        // Restore window state from settings
+        var settings = App.SettingsService.Settings;
+        if (settings.WindowLeft >= 0 && settings.WindowTop >= 0)
+        {
+            Left = settings.WindowLeft;
+            Top = settings.WindowTop;
+        }
+        Width = settings.WindowWidth;
+        Height = settings.WindowHeight;
+
+        if (settings.WindowMaximized)
+            WindowState = WindowState.Maximized;
+
+        // Restore last export path
+        if (DataContext is MainViewModel vm && !string.IsNullOrEmpty(settings.LastExportPath))
+            vm.ExportPath = settings.LastExportPath;
+    }
+
+    private void OnClosing(object? sender, System.ComponentModel.CancelEventArgs e)
+    {
+        // Save window state
+        App.SettingsService.SaveWindowState(
+            Left, Top, Width, Height,
+            WindowState == WindowState.Maximized);
     }
 
     // ── Window Controls ──
@@ -89,10 +110,7 @@ public partial class MainWindow : Window
             var files = (string[])e.Data.GetData(DataFormats.FileDrop);
             if (files.Length > 0)
             {
-                // Load image via the ViewModel's import
-                var openFileMethod = typeof(MainViewModel).GetMethod("ImportImage",
-                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                // Instead, set the file path and trigger loading through the command
+                // Trigger file import via ViewModel
                 vm.ImportImageCommand.Execute(null);
             }
         }

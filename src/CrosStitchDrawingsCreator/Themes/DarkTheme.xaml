@@ -1,0 +1,28 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ── Dark Theme Color Overrides ── -->
+    <Color x:Key="SurfaceColor">#1E1E1E</Color>
+    <Color x:Key="CardColor">#2D2D2D</Color>
+    <Color x:Key="TextPrimaryColor">#E0E0E0</Color>
+    <Color x:Key="TextSecondaryColor">#999999</Color>
+    <Color x:Key="BorderColor">#3E3E3E</Color>
+    <Color x:Key="DividerColor">#3E3E3E</Color>
+    <Color x:Key="PrimaryColor">#4BA3E3</Color>
+    <Color x:Key="PrimaryLightColor">#7EC1F0</Color>
+    <Color x:Key="PrimaryDarkColor">#2B7BBF</Color>
+
+    <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}"/>
+    <SolidColorBrush x:Key="CardBrush" Color="{StaticResource CardColor}"/>
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource TextPrimaryColor}"/>
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource TextSecondaryColor}"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource BorderColor}"/>
+    <SolidColorBrush x:Key="DividerBrush" Color="{StaticResource DividerColor}"/>
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
+    <SolidColorBrush x:Key="PrimaryLightBrush" Color="{StaticResource PrimaryLightColor}"/>
+    <SolidColorBrush x:Key="PrimaryDarkBrush" Color="{StaticResource PrimaryDarkColor}"/>
+    <SolidColorBrush x:Key="WhiteBrush" Color="#E0E0E0"/>
+    <SolidColorBrush x:Key="ErrorBrush" Color="#E85D5D"/>
+    <SolidColorBrush x:Key="SuccessBrush" Color="#4CAF50"/>
+    <SolidColorBrush x:Key="WarningBrush" Color="#FF9800"/>
+</ResourceDictionary>
