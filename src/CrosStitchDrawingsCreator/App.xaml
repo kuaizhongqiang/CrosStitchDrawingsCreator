@@ -1,0 +1,18 @@
+<Application x:Class="CrosStitchDrawingsCreator.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:CrosStitchDrawingsCreator"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/ModernStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Value Converters -->
+            <local:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+            <local:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibility"/>
+            <local:PaletteEntryToColorConverter x:Key="PaletteEntryToColor"/>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
