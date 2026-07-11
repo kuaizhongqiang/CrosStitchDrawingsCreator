@@ -206,6 +206,33 @@
                                                Margin="0,8,0,4"/>
                                     <CheckBox Content="显示网格线" IsChecked="{Binding ShowGridLines}" Margin="0,2,0,2"/>
                                     <CheckBox Content="启用抖动" IsChecked="{Binding EnableDithering}" Margin="0,2,0,2"/>
+                                    <CheckBox Content="显示符号叠加" IsChecked="{Binding ShowSymbols}" Margin="0,2,0,2"
+                                              Command="{Binding ToggleSymbolsCommand}"/>
+
+                                    <Separator Margin="0,4"/>
+
+                                    <!-- Fabric Calculator -->
+                                    <TextBlock Text="绣布计算" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"
+                                               Margin="0,8,0,4"/>
+                                    <Grid Margin="0,4,0,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="CT" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"
+                                                   VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                        <Slider Grid.Column="1" Minimum="6" Maximum="40" Value="{Binding FabricCount}"
+                                                IsSnapToTickEnabled="True" TickFrequency="2" Margin="0,0,8,0"/>
+                                        <TextBlock Grid.Column="2" Text="{Binding FabricCount}" FontSize="12"
+                                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                                   VerticalAlignment="Center" Width="24" TextAlignment="Right"/>
+                                    </Grid>
+                                    <Button Content="📐  计算布料尺寸" Command="{Binding CalculateFabricCommand}"
+                                            Style="{StaticResource SecondaryButtonStyle}" Height="30" FontSize="11"/>
+                                    <TextBlock Text="{Binding FabricResultText}" FontSize="11"
+                                               Foreground="{StaticResource TextSecondaryBrush}"
+                                               Margin="0,4,0,0" TextWrapping="Wrap"/>
                                 </StackPanel>
                             </Border>
 
@@ -318,7 +345,10 @@
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Border Margin="0,2" Padding="6,4" CornerRadius="4"
-                                                    Background="{StaticResource SurfaceBrush}">
+                                                    Background="{StaticResource SurfaceBrush}"
+                                                    Cursor="Hand"
+                                                    MouseLeftButtonUp="OnLegendItemClick"
+                                                    Tag="{Binding}">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="24"/>
