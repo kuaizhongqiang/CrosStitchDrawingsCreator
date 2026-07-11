@@ -116,6 +116,17 @@ public partial class MainWindow : Window
         }
     }
 
+    // ── Color Legend Click (Highlight) ──
+    private void OnLegendItemClick(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is Border border && border.Tag is Models.PaletteEntry entry
+            && DataContext is ViewModels.MainViewModel vm)
+        {
+            var index = vm.PaletteEntries.IndexOf(entry);
+            vm.SelectColorCommand.Execute(index);
+        }
+    }
+
     // ── Mouse Wheel Zoom ──
     private void OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {

@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Net.Http;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -84,8 +85,22 @@ public partial class MainViewModel : ObservableObject
     // Stored pattern data for export
     private PatternData? _currentPattern;
     private GenerationParameters _currentParams = new();
+    private readonly HighlightRenderService _highlightRender = new();
 
     private double _aspectRatio = 1.0;
+
+    // ── Phase 4: Advanced Features ──
+    [ObservableProperty]
+    private int _selectedColorIndex = -1;
+
+    [ObservableProperty]
+    private bool _showSymbols;
+
+    [ObservableProperty]
+    private int _fabricCount = 14;
+
+    [ObservableProperty]
+    private string _fabricResultText = string.Empty;
 
     public MainViewModel()
     {
@@ -406,5 +421,100 @@ public partial class MainViewModel : ObservableObject
     private void ResetZoom()
     {
         // Zoom reset is handled in the view via layout transform
+    }
+
+    [RelayCommand]
+    private void SelectColor(int colorIndex)
+    {
+        if (SelectedColorIndex == colorIndex)
+            SelectedColorIndex = -1; // toggle off
+        else
+            SelectedColorIndex = colorIndex;
+
+        // Re-render preview with/without highlight
+        UpdatePreview();
+    }
+
+    [RelayCommand]
+    private void CalculateFabric()
+    {
+        if (!HasPattern)
+        {
+            FabricResultText = "请先生成图纸。";
+            return;
+        }
+
+        var calc = new FabricCalculator();
+        var result = calc.Calculate(PatternWidth, PatternHeight, FabricCount);
+        FabricResultText = result.Summary;
+    }
+
+    [RelayCommand]
+    private void ToggleSymbols()
+    {
+        ShowSymbols = !ShowSymbols;
+        UpdatePreview();
+    }
+
+    [RelayCommand]
+    private async Task CheckForUpdates()
+    {
+        try
+        {
+            using var client = new HttpClient
+            {
+                Timeout = TimeSpan.FromSeconds(5)
+            };
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("CrosStitchDrawingsCreator/1.0");
+            var response = await client.GetAsync("https://api.github.com/repos/kuaizhongqiang/CrosStitchDrawingsCreator/releases/latest");
+            if (response.IsSuccessStatusCode)
+            {
+                FabricResultText = "已是最新版本。";
+            }
+            else
+            {
+                FabricResultText = "无法检查更新。";
+            }
+        }
+        catch
+        {
+            FabricResultText = "检查更新失败（无网络连接）。";
+        }
+    }
+
+    private void UpdatePreview()
+    {
+        if (_currentPattern == null) return;
+
+        var parameters = new GenerationParameters
+        {
+            ShowGridLines = ShowGridLines,
+            GridLineThickness = GridLineThickness
+        };
+
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            try
+            {
+                using var bitmap = _highlightRender.RenderPreview(
+                    _currentPattern,
+                    ShowGridLines,
+                    GridLineThickness,
+                    Math.Max(1, Math.Min(800 / _currentPattern.Width, 600 / _currentPattern.Height)),
+                    SelectedColorIndex,
+                    ShowSymbols);
+
+                using var data = bitmap.Encode(SkiaSharp.SKEncodedImageFormat.Png, 100);
+                var ms = new System.IO.MemoryStream(data.ToArray());
+                var bmp = new BitmapImage();
+                bmp.BeginInit();
+                bmp.StreamSource = ms;
+                bmp.CacheOption = BitmapCacheOption.OnLoad;
+                bmp.EndInit();
+                bmp.Freeze();
+                PatternPreview = bmp;
+            }
+            catch { }
+        });
     }
 }
