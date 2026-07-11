@@ -241,7 +241,6 @@
                                     <TextBlock FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4">
                                         <Run Text="{Binding ExportScale}"/><Run Text="×"/>
                                     </TextBlock>
-                                               Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
 
                                     <CheckBox Content="包含网格线" IsChecked="{Binding ExportIncludeGridLines}" Margin="0,2,0,0"/>
                                     <CheckBox Content="包含颜色图例" IsChecked="{Binding ExportIncludeLegend}" Margin="0,2,0,0"/>
@@ -380,7 +379,7 @@
                             <Run Text="{Binding ColorCount, StringFormat={}{0} 色}" />
                             <!-- Add current palette info -->
                             <Run Text="  |  "/>
-                            <Run Text="{Binding PaletteEntries.Count, StringFormat={}{0} 颜色}"/>
+                            <Run Text="{Binding PaletteCount, StringFormat={}{0} 颜色}"/>
                         </TextBlock>
                     </Grid>
                 </Border>
