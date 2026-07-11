@@ -394,4 +394,17 @@ public partial class MainViewModel : ObservableObject
             ExportPath = dialog.FolderName;
         }
     }
+
+    [RelayCommand]
+    private void ToggleTheme()
+    {
+        var theme = App.ThemeService.Toggle();
+        App.SettingsService.SaveTheme(theme);
+    }
+
+    [RelayCommand]
+    private void ResetZoom()
+    {
+        // Zoom reset is handled in the view via layout transform
+    }
 }
