@@ -65,6 +65,9 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private bool _isGenerating;
 
+    [ObservableProperty]
+    private int _paletteCount;
+
     // ── Export ──
     [ObservableProperty]
     private int _exportScale = 4;
@@ -254,6 +257,7 @@ public partial class MainViewModel : ObservableObject
             await Task.Run(() => RenderPreview(pattern, parameters));
 
             PaletteEntries = new ObservableCollection<PaletteEntry>(pattern.Palette);
+            PaletteCount = pattern.Palette.Count;
             HasPattern = true;
         }
         catch (Exception ex)
